@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_to_list"
+        android:title="@string/to_list"
+        android:icon="@drawable/ic_sort_white"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+    <item
+        android:id="@+id/action_to_favorite"
+        android:title="@string/to_favorite"
+        android:icon="@drawable/ic_favorite_white"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_change_settings"
+        android:title="@string/change_language"
+        android:icon="@drawable/ic_compare_arrows_white"
+        app:showAsAction="ifRoom"/>
+</menu>

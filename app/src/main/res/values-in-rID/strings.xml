@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MY LIST APP</string>
+    <string name="judul_film">Judul Film</string>
+    <string name="tahun">2019</string>
+    <string name="hello_blank_fragment">halo pecahan kosong</string>
+    <string name="comming_soon">AKAN HADIR</string>
+    <string name="film_menu">FILM</string>
+    <string name="tvshow_menu">ACARA TV</string>
+    <string name="change_language">Ubah Bahasa</string>
+    <string name="description_picture">deskripsi gambar</string>
+    <string name="detail_film_title">Detail Film</string>
+    <string name="detail_tv_title">Detail Tv Show</string>
+    <string name="test_deskripsi">tes deskripsi</string>
+    <string name="add_widget">Tambah widget</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="fav">fav</string>
+    <string name="film_kosong">Film Kosong</string>
+    <string name="judul">Judul</string>
+    <string name="new_films">Film Favorit</string>
+    <string name="to_favorite">Ke Favorit</string>
+    <string name="to_list">Ke Daftar</string>
+    <string name="item_widget">item widget</string>
+</resources>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">MY LIST APP</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="judul_film">Film Title</string>
+    <string name="tahun">2019</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="comming_soon">COMMING SOON</string>
+    <string name="film_menu">FILM</string>
+    <string name="tvshow_menu">TV SHOW</string>
+    <string name="change_language">Change Language</string>
+    <string name="description_picture">description picture</string>
+    <string name="test_deskripsi">test deskripsi</string>
+    <string name="detail_film_title">Film Detail</string>
+    <string name="detail_tv_title">Tv Show Detail</string>
+    <string name="fav">fav</string>
+    <string name="judul">Title</string>
+    <string name="deskripsi">Description</string>
+    <string name="to_favorite">To Favorite</string>
+    <string name="to_list">To List</string>
+    <string name="add_widget">Add widget</string>
+    <string name="film_kosong">Empty Film</string>
+    <string name="new_films">Favorite Films</string>
+    <string name="item_widget">item widget</string>
+</resources>
