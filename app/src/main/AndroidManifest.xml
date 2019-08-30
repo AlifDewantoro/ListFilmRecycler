@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <permission android:name="com.example.alifd.listfilmrecycler.READ_DATABASE" android:protectionLevel="normal" />
+    <permission android:name="com.example.alifd.listfilmrecycler.WRITE_DATABASE" android:protectionLevel="normal" />
+
 
     <application
         android:name=".base.BaseApplication"
@@ -41,6 +44,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".base.BaseActivity" />
+        <provider
+            android:name=".contentprovider.FavFilmProvider"
+            android:authorities="com.example.alifd.listfilmrecycler"
+            android:exported="true"
+            android:readPermission="com.example.alifd.listfilmrecycler.READ_DATABASE"
+            android:writePermission="com.example.alifd.listfilmrecycler.WRITE_DATABASE"/>
     </application>
 
 </manifest>
