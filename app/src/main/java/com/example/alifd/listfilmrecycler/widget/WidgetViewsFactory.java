@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.example.alifd.listfilmrecycler.R;
+import com.example.alifd.listfilmrecycler.db.FavHelper;
 import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 import com.example.alifd.listfilmrecycler.model.FilmModel;
@@ -31,13 +32,16 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     private List<String> widgetItems = new ArrayList<>();
     private final Context context;
     private SessionManager sessionManager;
-    private Realm realm;
+    //private Realm realm;
+    private FavHelper favHelper;
 
     public WidgetViewsFactory(Context context) {
         this.context = context;
 
         this.sessionManager = new SessionManager(context);
-
+        favHelper = FavHelper.getInstance(context);
+        favHelper.open();
+        /*
         Realm.init(context);
         RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .name("fav_catalogue.db")
@@ -45,11 +49,12 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
                 .build();
         Realm.setDefaultConfiguration(configuration);
         this.realm = Realm.getDefaultInstance();
+         */
     }
 
     @Override
     public void onCreate() {
-        List<FilmModel> filmModels = new ArrayList<>(realm.where(FilmModel.class).findAll());
+        List<FilmModel> filmModels = new ArrayList<>(favHelper.getAllFilmFavs());
         for(int x=0; x<filmModels.size(); x++) {
             widgetItems.add(filmModels.get(x).getPosterPath());
             Timber.e("create factory %s", widgetItems.get(x));
@@ -62,7 +67,7 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public void onDestroy() {
-
+        favHelper.close();
     }
 
     @Override
