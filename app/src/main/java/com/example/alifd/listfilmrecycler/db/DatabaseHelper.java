@@ -30,14 +30,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.FavColumns.RELEASE_DATE
     );
 
+    private static final String SQL_CREATE_TABLE_FAV_SHOW = String.format("CREATE TABLE %s"
+                    + " (%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " %s TEXT NOT NULL," +
+                    " %s TEXT NOT NULL," +
+                    " %s TEXT NOT NULL," +
+                    " %s TEXT NOT NULL," +
+                    " %s TEXT NOT NULL," +
+                    " %s TEXT NOT NULL)",
+            DatabaseContract.TABLE_FAV_SHOW,
+            DatabaseContract.ShowFavColumns._ID,
+            DatabaseContract.ShowFavColumns.ID,
+            DatabaseContract.ShowFavColumns.NAME,
+            DatabaseContract.ShowFavColumns.VOTE_AVERAGE,
+            DatabaseContract.ShowFavColumns.FIRST_AIR_DATE,
+            DatabaseContract.ShowFavColumns.POSTER_PATH,
+            DatabaseContract.ShowFavColumns.OVERVIEW
+    );
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_TABLE_FAV);
+        db.execSQL(SQL_CREATE_TABLE_FAV_SHOW);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_FAV);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TABLE_FAV_SHOW);
         onCreate(db);
     }
 }

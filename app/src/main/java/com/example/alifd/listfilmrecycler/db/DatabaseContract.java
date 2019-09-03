@@ -8,6 +8,7 @@ public class DatabaseContract {
     public static final String AUTHORITY = "com.example.alifd.listfilmrecycler";
     public static final String SCHEME = "content";
     static String TABLE_FAV = "fav";
+    static String TABLE_FAV_SHOW = "fav_show";
 
     public static final class FavColumns implements BaseColumns{
         public static final String TABLE_NAME = "fav_movie";
@@ -22,6 +23,16 @@ public class DatabaseContract {
                 .authority(AUTHORITY)
                 .appendPath(TABLE_NAME)
                 .build();
+    }
+
+    public static final class ShowFavColumns implements BaseColumns{
+        //public static final String TABLE_NAME = "fav_show";
+        static String ID = "id";
+        static String NAME = "name";
+        static String VOTE_AVERAGE = "vote_average";
+        static String FIRST_AIR_DATE = "first_air_date";
+        static String POSTER_PATH = "poster_path";
+        static String OVERVIEW = "overview";
     }
 
     public static String getColumnString(Cursor cursor, String columnName) {

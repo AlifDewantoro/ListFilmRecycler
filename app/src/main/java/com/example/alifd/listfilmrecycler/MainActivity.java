@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity {
                 allList.setVisible(listVisibility);
                 favorite.setVisible(favVisibility);
                 filmLocalView.onChangeToFavorite(favHelper.getAllFilmFavs());
-                tvShowLocalView.onChangeToFavorite(realmManager.getListTvShowFav());
+                tvShowLocalView.onChangeToFavorite(favHelper.getAllShowFavs());
                 break;
             case(R.id.action_to_list):
                 favVisibility = true;

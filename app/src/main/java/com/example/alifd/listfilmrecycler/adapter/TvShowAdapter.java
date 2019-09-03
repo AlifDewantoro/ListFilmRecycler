@@ -31,17 +31,21 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     private Context context;
     private List<TvShowModel> tvShowModels;
     private SessionManager sessionManager;
-    private RealmManager realmManager;
+    //private RealmManager realmManager;
     private FavHelper favHelper;
 
     public TvShowAdapter(Context context, List<TvShowModel> tvShowModels) {
         this.context = context;
         this.tvShowModels = tvShowModels;
         this.sessionManager = new SessionManager(context);
-
+        this.favHelper = FavHelper.getInstance(context);
+        favHelper.open();
+/*
         Realm.init(context);
         Realm realm = Realm.getDefaultInstance();
         realmManager = new RealmManager(realm);
+
+ */
     }
 
     @NonNull
@@ -54,7 +58,8 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final TvShowModel tvShowModel = tvShowModels.get(i);
-        final TvShowModel fav = realmManager.getFavTvShowById(tvShowModel.getId());
+        final TvShowModel fav = favHelper.getShowFavorite(tvShowModel.getId());
+        //final TvShowModel fav = realmManager.getFavTvShowById(tvShowModel.getId());
 
         RequestOptions requestOptions = new RequestOptions()
                 .centerCrop();
@@ -77,7 +82,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
             }
         });
 
-        if(fav!=null){
+        if(fav.getId()!=null){
             viewHolder.ivFavTv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
         }else{
             viewHolder.ivFavTv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
@@ -86,15 +91,17 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
         viewHolder.ivFavTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                TvShowModel favInside = realmManager.getFavTvShowById(tvShowModel.getId());
-                if(favInside==null) {
+                TvShowModel favInside = favHelper.getShowFavorite(tvShowModel.getId());
+                //TvShowModel favInside = realmManager.getFavTvShowById(tvShowModel.getId());
+                if(favInside.getId()==null) {
                     Timber.e("do Favorite");
-                    realmManager.saveTvShow(tvShowModel);
+                    favHelper.insertShow(tvShowModel);
+                    //realmManager.saveTvShow(tvShowModel);
                     viewHolder.ivFavTv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
                 }else{
                     Timber.e("do Unfavorite");
-                    realmManager.deleteTvShow(tvShowModel.getId());
+                    favHelper.deleteShow(tvShowModel.getId());
+                    //realmManager.deleteTvShow(tvShowModel.getId());
                     viewHolder.ivFavTv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
                 }
             }
@@ -119,5 +126,12 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
             tvJudulTv = itemView.findViewById(R.id.tv_judul_tv);
             tvDesTv = itemView.findViewById(R.id.tv_des_tv);
         }
+    }
+
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        favHelper.close();
     }
 }
