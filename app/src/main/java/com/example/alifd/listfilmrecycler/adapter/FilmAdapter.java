@@ -2,6 +2,7 @@ package com.example.alifd.listfilmrecycler.adapter;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,10 +17,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.alifd.listfilmrecycler.DetailFilmActivity;
 import com.example.alifd.listfilmrecycler.R;
+import com.example.alifd.listfilmrecycler.db.FavHelper;
 import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 import com.example.alifd.listfilmrecycler.model.FilmModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -30,18 +33,53 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     private Context context;
     private List<FilmModel> filmModels;
     private SessionManager sessionManager;
-    private RealmManager realmManager;
-
+    //private RealmManager realmManager;
+    private FavHelper favHelper;
+/*
+    private Activity activity;
+    private ArrayList<FilmModel> listFav = new ArrayList<>();
+*/
     public FilmAdapter(Context context, List<FilmModel> filmModels) {
         this.context = context;
         this.filmModels = filmModels;
         this.sessionManager = new SessionManager(context);
-
+        this.favHelper = FavHelper.getInstance(context);
+        favHelper.open();
+        /*
         Realm.init(context);
         Realm realm = Realm.getDefaultInstance();
         realmManager = new RealmManager(realm);
+         */
+    }
+/*
+    public FilmAdapter(Activity activity) {
+        this.activity = activity;
     }
 
+    public ArrayList<FilmModel> getListFav() {
+        return listFav;
+    }
+
+    public void setListNotes(ArrayList<FilmModel> listFavs) {
+        if (listFavs.size() > 0) {
+            this.listFav.clear();
+        }
+        this.listFav.addAll(listFavs);
+        notifyDataSetChanged();
+    }
+    public void addItem(FilmModel filmModel) {
+        this.listFav.add(filmModel);
+        notifyItemInserted(listFav.size() - 1);
+    }
+    public void updateItem(int position, FilmModel filmModel) {
+        this.listFav.set(position, filmModel);
+        notifyItemChanged(position, filmModel);
+    }
+    public void removeItem(int position) {
+        this.listFav.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, listFav.size());
+    }*/
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -53,7 +91,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         final FilmModel filmModel = filmModels.get(i);
-        final FilmModel fav = realmManager.getFavFilmById(filmModel.getId());
+        final FilmModel fav = favHelper.getFilmFavorite(filmModel.getId());
+        //final FilmModel fav = realmManager.getFavFilmById(filmModel.getId());
 
         RequestOptions requestOptions = new RequestOptions()
                 .centerCrop();
@@ -75,7 +114,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
-        if(fav!=null){
+        if(fav.getId()!=null){
             viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
         }else{
             viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
@@ -84,14 +123,17 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
         viewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FilmModel favInside = realmManager.getFavFilmById(filmModel.getId());
-                if(favInside==null) {
+                FilmModel favInside = favHelper.getFilmFavorite(filmModel.getId());
+                //FilmModel favInside = realmManager.getFavFilmById(filmModel.getId());
+                if(favInside.getId()==null) {
                     Timber.e("do Favorite");
-                    realmManager.saveFilm(filmModel);
+                    favHelper.insertFilm(filmModel);
+                    //realmManager.saveFilm(filmModel);
                     viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
                 }else{
                     Timber.e("do Unfavorite");
-                    realmManager.deleteFilm(filmModel.getId());
+                    favHelper.deleteFilm(filmModel.getId());
+                    //realmManager.deleteFilm(filmModel.getId());
                     viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
                 }
             }
@@ -116,5 +158,11 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
             tvTahun = itemView.findViewById(R.id.tv_tahun);
             ivFav = itemView.findViewById(R.id.iv_fav_film);
         }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        favHelper.close();
     }
 }

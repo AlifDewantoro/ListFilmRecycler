@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.alifd.listfilmrecycler.DetailTvShowActivity;
 import com.example.alifd.listfilmrecycler.R;
+import com.example.alifd.listfilmrecycler.db.FavHelper;
 import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 import com.example.alifd.listfilmrecycler.model.TvShowModel;
@@ -31,6 +32,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     private List<TvShowModel> tvShowModels;
     private SessionManager sessionManager;
     private RealmManager realmManager;
+    private FavHelper favHelper;
 
     public TvShowAdapter(Context context, List<TvShowModel> tvShowModels) {
         this.context = context;

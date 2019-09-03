@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.example.alifd.listfilmrecycler.adapter.CustomPagerAdapter;
 import com.example.alifd.listfilmrecycler.base.BaseActivity;
+import com.example.alifd.listfilmrecycler.db.FavHelper;
 import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.view.FilmLocalView;
 import com.example.alifd.listfilmrecycler.view.TvShowLocalView;
@@ -31,6 +32,7 @@ public class MainActivity extends BaseActivity {
     boolean listVisibility;
     MenuItem setLanguage;
     private RealmManager realmManager;
+    private FavHelper favHelper;
 
     FilmLocalView filmLocalView;
     TvShowLocalView tvShowLocalView;
@@ -45,6 +47,9 @@ public class MainActivity extends BaseActivity {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
         realmManager = new RealmManager(realm);
+
+        favHelper = FavHelper.getInstance(getApplicationContext());
+        favHelper.open();
 
         if(savedInstanceState!=null){
             favVisibility = savedInstanceState.getBoolean("menu_fav",true);
@@ -119,7 +124,7 @@ public class MainActivity extends BaseActivity {
                 favVisibility = false;
                 allList.setVisible(listVisibility);
                 favorite.setVisible(favVisibility);
-                filmLocalView.onChangeToFavorite(realmManager.getListFilmFav());
+                filmLocalView.onChangeToFavorite(favHelper.getAllFilmFavs());
                 tvShowLocalView.onChangeToFavorite(realmManager.getListTvShowFav());
                 break;
             case(R.id.action_to_list):
@@ -144,5 +149,11 @@ public class MainActivity extends BaseActivity {
         outState.putBoolean("menu_fav", favVisibility);
         outState.putBoolean("menu_list", listVisibility);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        favHelper.close();
     }
 }

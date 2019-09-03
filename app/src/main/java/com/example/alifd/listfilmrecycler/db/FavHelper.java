@@ -49,7 +49,7 @@ public class FavHelper {
             database.close();
     }
 
-    public ArrayList<FilmModel> getAllNotes() {
+    public ArrayList<FilmModel> getAllFilmFavs() {
         ArrayList<FilmModel> arrayList = new ArrayList<>();
         Cursor cursor = database.query(DATABASE_TABLE, null,
                 null,
@@ -77,7 +77,37 @@ public class FavHelper {
         return arrayList;
     }
 
-    public long insertNote(FilmModel filmModel) {
+    public FilmModel getFilmFavorite(int id){
+        Cursor cursor = database.query(DATABASE_TABLE, null,
+                null,
+                null,
+                null,
+                null,
+                _ID + " ASC",
+                null);
+        cursor.moveToFirst();
+
+        FilmModel filmModel;
+        filmModel = new FilmModel();
+        if (cursor.getCount() > 0) {
+            do {
+                if(cursor.getInt(cursor.getColumnIndexOrThrow(ID))==id) {
+                    filmModel.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
+                    filmModel.setVoteAverage(cursor.getDouble(cursor.getColumnIndexOrThrow(TITLE)));
+                    filmModel.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(TITLE)));
+                    filmModel.setPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(POSTER_PATH)));
+                    filmModel.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(OVERVIEW)));
+                    filmModel.setReleaseDate(cursor.getString(cursor.getColumnIndexOrThrow(RELEASE_DATE)));
+                }
+                cursor.moveToNext();
+            } while (!cursor.isAfterLast());
+        }
+        cursor.close();
+
+        return filmModel;
+    }
+
+    public long insertFilm(FilmModel filmModel) {
         ContentValues args = new ContentValues();
         args.put(ID, filmModel.getId());
         args.put(VOTE_AVERAGE, filmModel.getVoteAverage());
@@ -88,7 +118,7 @@ public class FavHelper {
         return database.insert(DATABASE_TABLE, null, args);
     }
 
-    public int updateNote(FilmModel filmModel) {
+    public int updateFilm(FilmModel filmModel) {
         ContentValues args = new ContentValues();
         args.put(ID, filmModel.getId());
         args.put(VOTE_AVERAGE, filmModel.getVoteAverage());
@@ -99,7 +129,7 @@ public class FavHelper {
         return database.update(DATABASE_TABLE, args, ID + "= '" + filmModel.getId() + "'", null);
     }
 
-    public int deleteNote(int id) {
+    public int deleteFilm(int id) {
         return database.delete(TABLE_FAV, ID + " = '" + id + "'", null);
     }
 }
