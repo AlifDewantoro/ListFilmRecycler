@@ -8,15 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
-
-public class FilmModel extends RealmObject implements Parcelable {
+public class FilmModel implements Parcelable {
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;
-    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -41,7 +36,6 @@ public class FilmModel extends RealmObject implements Parcelable {
     @SerializedName("original_title")
     @Expose
     private String originalTitle;
-    @Ignore
     @SerializedName("genre_ids")
     @Expose
     private List<Integer> genreIds = null;

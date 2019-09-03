@@ -8,17 +8,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
 
-
-public class TvShowModel extends RealmObject implements Parcelable {
+public class TvShowModel implements Parcelable {
 
     @SerializedName("original_name")
     @Expose
     private String originalName;
-    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -40,7 +35,6 @@ public class TvShowModel extends RealmObject implements Parcelable {
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
-    @Ignore
     @SerializedName("genre_ids")
     @Expose
     private List<Integer> genreIds = null;
@@ -53,7 +47,6 @@ public class TvShowModel extends RealmObject implements Parcelable {
     @SerializedName("overview")
     @Expose
     private String overview;
-    @Ignore
     @SerializedName("origin_country")
     @Expose
     private List<String> originCountry = null;
