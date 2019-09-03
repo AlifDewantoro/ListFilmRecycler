@@ -11,13 +11,11 @@ import android.view.MenuItem;
 import com.example.alifd.listfilmrecycler.adapter.CustomPagerAdapter;
 import com.example.alifd.listfilmrecycler.base.BaseActivity;
 import com.example.alifd.listfilmrecycler.db.FavHelper;
-import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.view.FilmLocalView;
 import com.example.alifd.listfilmrecycler.view.TvShowLocalView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 public class MainActivity extends BaseActivity {
 
@@ -31,7 +29,7 @@ public class MainActivity extends BaseActivity {
     MenuItem allList;
     boolean listVisibility;
     MenuItem setLanguage;
-    private RealmManager realmManager;
+    //private RealmManager realmManager;
     private FavHelper favHelper;
 
     FilmLocalView filmLocalView;
@@ -43,10 +41,12 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-
+/*
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
         realmManager = new RealmManager(realm);
+
+ */
 
         favHelper = FavHelper.getInstance(getApplicationContext());
         favHelper.open();

@@ -1,7 +1,5 @@
 package com.example.alifd.listfilmrecycler.widget;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,19 +9,14 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.example.alifd.listfilmrecycler.R;
 import com.example.alifd.listfilmrecycler.db.FavHelper;
-import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 import com.example.alifd.listfilmrecycler.model.FilmModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
 
@@ -32,7 +25,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
     private List<String> widgetItems = new ArrayList<>();
     private final Context context;
     private SessionManager sessionManager;
-    //private Realm realm;
     private FavHelper favHelper;
 
     public WidgetViewsFactory(Context context) {
@@ -41,15 +33,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         this.sessionManager = new SessionManager(context);
         favHelper = FavHelper.getInstance(context);
         favHelper.open();
-        /*
-        Realm.init(context);
-        RealmConfiguration configuration = new RealmConfiguration.Builder()
-                .name("fav_catalogue.db")
-                .schemaVersion(0)
-                .build();
-        Realm.setDefaultConfiguration(configuration);
-        this.realm = Realm.getDefaultInstance();
-         */
     }
 
     @Override
@@ -81,7 +64,6 @@ public class WidgetViewsFactory implements RemoteViewsService.RemoteViewsFactory
         String imgPath = String.format("%s/%s", sessionManager.getImgBaseUrl(), widgetItems.get(position));
         Timber.e("link di widget %s", imgPath);
         Uri uri = Uri.parse(imgPath);
-        //remoteViews.setImageViewUri(R.id.imageViewWidget, uri);
 
         try {
             Bitmap bitmap = Glide.with(context)

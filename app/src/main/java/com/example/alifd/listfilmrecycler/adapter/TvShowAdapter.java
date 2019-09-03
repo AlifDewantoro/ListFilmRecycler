@@ -15,13 +15,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.alifd.listfilmrecycler.DetailTvShowActivity;
 import com.example.alifd.listfilmrecycler.R;
 import com.example.alifd.listfilmrecycler.db.FavHelper;
-import com.example.alifd.listfilmrecycler.helper.RealmManager;
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 import com.example.alifd.listfilmrecycler.model.TvShowModel;
 
 import java.util.List;
 
-import io.realm.Realm;
 import timber.log.Timber;
 
 import static com.example.alifd.listfilmrecycler.DetailTvShowActivity.DETAIL_TV;
@@ -31,7 +29,6 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     private Context context;
     private List<TvShowModel> tvShowModels;
     private SessionManager sessionManager;
-    //private RealmManager realmManager;
     private FavHelper favHelper;
 
     public TvShowAdapter(Context context, List<TvShowModel> tvShowModels) {
@@ -40,12 +37,6 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
         this.sessionManager = new SessionManager(context);
         this.favHelper = FavHelper.getInstance(context);
         favHelper.open();
-/*
-        Realm.init(context);
-        Realm realm = Realm.getDefaultInstance();
-        realmManager = new RealmManager(realm);
-
- */
     }
 
     @NonNull
@@ -59,12 +50,11 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final TvShowModel tvShowModel = tvShowModels.get(i);
         final TvShowModel fav = favHelper.getShowFavorite(tvShowModel.getId());
-        //final TvShowModel fav = realmManager.getFavTvShowById(tvShowModel.getId());
 
         RequestOptions requestOptions = new RequestOptions()
                 .centerCrop();
         String imgPath = String.format("%s/%s",sessionManager.getImgBaseUrl(), tvShowModel.getPosterPath());
-        Timber.e("INI LINK FOTO "+ imgPath);
+        Timber.e("INI LINK FOTO %s", imgPath);
         Glide.with(context)
                 .load(imgPath)
                 .apply(requestOptions)
@@ -92,16 +82,13 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 TvShowModel favInside = favHelper.getShowFavorite(tvShowModel.getId());
-                //TvShowModel favInside = realmManager.getFavTvShowById(tvShowModel.getId());
                 if(favInside.getId()==null) {
                     Timber.e("do Favorite");
                     favHelper.insertShow(tvShowModel);
-                    //realmManager.saveTvShow(tvShowModel);
                     viewHolder.ivFavTv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
                 }else{
                     Timber.e("do Unfavorite");
                     favHelper.deleteShow(tvShowModel.getId());
-                    //realmManager.deleteTvShow(tvShowModel.getId());
                     viewHolder.ivFavTv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
                 }
             }

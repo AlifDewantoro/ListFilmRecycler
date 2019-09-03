@@ -3,21 +3,12 @@ package com.example.alifd.listfilmrecycler.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.AppWidgetTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.example.alifd.listfilmrecycler.MainActivity;
 import com.example.alifd.listfilmrecycler.R;
 
 /**
@@ -71,7 +62,7 @@ public class ListFilmAppWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent.getAction() != null) {
             if (intent.getAction().equals(TOAST_ACTION)) {
-                int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
+                //int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 
                 //Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
             }
