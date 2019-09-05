@@ -16,6 +16,7 @@ import com.example.alifd.listfilmrecycler.view.TvShowLocalView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
@@ -29,7 +30,6 @@ public class MainActivity extends BaseActivity {
     MenuItem allList;
     boolean listVisibility;
     MenuItem setLanguage;
-    //private RealmManager realmManager;
     private FavHelper favHelper;
 
     FilmLocalView filmLocalView;
@@ -41,12 +41,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-/*
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-        realmManager = new RealmManager(realm);
-
- */
 
         favHelper = FavHelper.getInstance(getApplicationContext());
         favHelper.open();
@@ -93,10 +87,19 @@ public class MainActivity extends BaseActivity {
 
     public void setFilmFragInteractor(FilmLocalView filmLocalView){
         this.filmLocalView = filmLocalView;
+        Timber.e("status visibility menu %s", favVisibility);
+        if(!favVisibility){
+            Timber.e("masuk fav");
+            filmLocalView.onChangeToFavorite(favHelper.getAllFilmFavs());
+        }
     }
 
     public void setTvShowFragInteractor(TvShowLocalView tvShowLocalView){
         this.tvShowLocalView = tvShowLocalView;
+        if(!favVisibility){
+            Timber.e("masuk fav");
+            tvShowLocalView.onChangeToFavorite(favHelper.getAllShowFavs());
+        }
     }
 
     @Override
@@ -138,8 +141,6 @@ public class MainActivity extends BaseActivity {
             default:
                 break;
 
-        }
-        if (item.getItemId() == R.id.action_change_settings){
         }
         return super.onOptionsItemSelected(item);
     }

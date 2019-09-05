@@ -2,8 +2,15 @@ package com.example.alifd.listfilmrecycler.adapter;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,27 +24,58 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.alifd.listfilmrecycler.DetailFilmActivity;
 import com.example.alifd.listfilmrecycler.R;
 import com.example.alifd.listfilmrecycler.db.FavHelper;
+import com.example.alifd.listfilmrecycler.helper.MappingHelper;
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 import com.example.alifd.listfilmrecycler.model.FilmModel;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.CONTENT_URI;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.ID;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.OVERVIEW;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.POSTER_PATH;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.RELEASE_DATE;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.TITLE;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.VOTE_AVERAGE;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
 
     private Context context;
     private List<FilmModel> filmModels;
+    private ArrayList<FilmModel> filmModelsDB;
     private SessionManager sessionManager;
     private FavHelper favHelper;
+    private static HandlerThread handlerThread;
+    private Cursor cursor;
 
     public FilmAdapter(Context context, List<FilmModel> filmModels) {
         this.context = context;
         this.filmModels = filmModels;
         this.sessionManager = new SessionManager(context);
+
+        handlerThread = new HandlerThread("DataObserver");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+        DataObserver observer = new DataObserver(handler);
+        context.getContentResolver().registerContentObserver(CONTENT_URI,true,observer);
+
+        getDataFromDB();
+
         this.favHelper = FavHelper.getInstance(context);
         favHelper.open();
     }
+
+    private void getDataFromDB(){
+        cursor = context.getContentResolver().query(CONTENT_URI,null,null,null,null);
+        if(cursor != null) {
+            this.filmModelsDB = MappingHelper.mapCursorToArrayList(cursor);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -49,7 +87,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         final FilmModel filmModel = filmModels.get(i);
-        final FilmModel fav = favHelper.getFilmFavorite(filmModel.getId());
+        //final FilmModel fav = favHelper.getFilmFavorite(filmModel.getId());
         //final FilmModel fav = realmManager.getFavFilmById(filmModel.getId());
 
         RequestOptions requestOptions = new RequestOptions()
@@ -72,7 +110,7 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
-        if(fav.getId()!=null){
+        if(checkFavFilm(filmModel)){
             viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
         }else{
             viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
@@ -81,14 +119,29 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
         viewHolder.ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FilmModel favInside = favHelper.getFilmFavorite(filmModel.getId());
-                if(favInside.getId()==null) {
+                //FilmModel favInside = favHelper.getFilmFavorite(filmModel.getId());
+                if(!checkFavFilm(filmModel)) {
                     Timber.e("do Favorite");
-                    favHelper.insertFilm(filmModel);
+                    //favHelper.insertFilm(filmModel);
+                    ContentValues values = new ContentValues(6);
+                    values.put(ID, filmModel.getId());
+                    values.put(VOTE_AVERAGE, filmModel.getVoteAverage());
+                    values.put(TITLE, filmModel.getTitle());
+                    values.put(POSTER_PATH, filmModel.getPosterPath());
+                    values.put(OVERVIEW, filmModel.getOverview());
+                    values.put(RELEASE_DATE, filmModel.getReleaseDate());
+                    context.getContentResolver().insert(CONTENT_URI, values);
+                    filmModelsDB.clear();
+                    getDataFromDB();
                     viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_red));
                 }else{
                     Timber.e("do Unfavorite");
-                    favHelper.deleteFilm(filmModel.getId());
+                    //favHelper.deleteFilm(filmModel.getId());
+                    Uri uri = Uri.parse(CONTENT_URI+"/"+filmModel.getId().toString());
+                    Timber.e(uri.toString());
+                    context.getContentResolver().delete(uri, null, null);
+                    filmModelsDB.clear();
+                    getDataFromDB();
                     viewHolder.ivFav.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_favorite_border_black));
                 }
             }
@@ -119,5 +172,24 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         favHelper.close();
+    }
+
+    private boolean checkFavFilm(FilmModel filmModel){
+        boolean result = false;
+        for(int x=0; x<filmModelsDB.size(); x++){
+            Timber.e(filmModelsDB.get(x).getId().toString());
+            Timber.e(filmModel.getId().toString());
+            if(filmModel.getId().toString().equals(filmModelsDB.get(x).getId().toString())){
+                result = true;
+            }
+        }
+        Timber.e("%s", result);
+        return result;
+    }
+
+    public static class DataObserver extends ContentObserver {
+        public DataObserver(Handler handler) {
+            super(handler);
+        }
     }
 }

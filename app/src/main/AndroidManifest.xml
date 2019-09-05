@@ -4,8 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <permission android:name="com.dicoding.mynotesapp.READ_DATABASE" android:protectionLevel="normal"/>
+    <permission android:name="com.dicoding.mynotesapp.WRITE_DATABASE" android:protectionLevel="normal"/>
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".base.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -41,6 +44,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".base.BaseActivity" />
+        <provider
+            android:authorities="com.example.alifd.listfilmrecycler"
+            android:name=".db.FavProvider"
+            android:exported="true"
+            android:readPermission="com.example.alifd.listfilmrecycler.READ_DATABASE"
+            android:writePermission="com.example.alifd.listfilmrecycler.WRITE_DATABASE" />
     </application>
 
 </manifest>

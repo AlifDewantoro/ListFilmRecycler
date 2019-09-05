@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.alifd.listfilmrecycler.BuildConfig;
 import com.example.alifd.listfilmrecycler.MainActivity;
 import com.example.alifd.listfilmrecycler.R;
 import com.example.alifd.listfilmrecycler.adapter.FilmAdapter;
@@ -75,11 +76,13 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
             filmModelArrayList= new ArrayList<>();
         }
         if(savedInstanceState!=null){
+            Timber.e("masuk savedInstance");
             filmModelArrayList = savedInstanceState.getParcelableArrayList("data");
             filmAdapter = new FilmAdapter(getContext(), filmModelArrayList);
             rvFilm.setAdapter(filmAdapter);
             progressBar.setVisibility(View.GONE);
         }else {
+            Timber.e("request normal");
             requestData();
         }
         setSearchNormal();
@@ -94,7 +97,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
                 if(query.length()>0) {
                     Timber.e("search");
                     filmModelArrayList.clear();
-                    filmPresenter.getFilmListByQuery(sessionManager.getKey(), sessionManager.getLanguage(), query);
+                    filmPresenter.getFilmListByQuery(BuildConfig.API_KEY, sessionManager.getLanguage(), query);
                     rvFilm.setVisibility(View.GONE);
                     progressBar.setVisibility(View.VISIBLE);
                 }
@@ -104,11 +107,13 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
 
             @Override
             public boolean onQueryTextChange(String query) {
+                /*
                 if(query.length()==0){
                     Timber.e("normal");
                     filmModelArrayList.clear();
                     requestData();
                 }
+                 */
                 return false;
             }
         });
@@ -122,7 +127,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
                 if(query.length()>0) {
                     Timber.e("search");
                     filmModelArrayList.clear();
-                    filmPresenter.getFilmListByQuery(sessionManager.getKey(), sessionManager.getLanguage(), query);
+                    filmPresenter.getFilmListByQuery(BuildConfig.API_KEY, sessionManager.getLanguage(), query);
                     rvFilm.setVisibility(View.GONE);
                     progressBar.setVisibility(View.VISIBLE);
                 }
@@ -148,7 +153,8 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
         }else {
             Timber.e("context null");
         }
-        filmPresenter.getFilmList(sessionManager.getKey(), sessionManager.getLanguage());
+        filmPresenter.getFilmList(BuildConfig.API_KEY, sessionManager.getLanguage());
+        Timber.e("get key %s", BuildConfig.API_KEY);
         rvFilm.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -188,9 +194,11 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
     @Override
     public void onChangeToFavorite(List<FilmModel> filmModels) {
         Timber.e("to fav");
-        filmModelArrayList.clear();
-        filmModelArrayList.addAll(filmModels);
-        filmAdapter.notifyDataSetChanged();
+        if(filmModelArrayList!=null) {
+            filmModelArrayList.clear();
+            filmModelArrayList.addAll(filmModels);
+            filmAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

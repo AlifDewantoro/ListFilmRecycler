@@ -1,12 +1,18 @@
 package com.example.alifd.listfilmrecycler.model;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.alifd.listfilmrecycler.db.DatabaseContract;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.getColumnDouble;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.getColumnInt;
+import static com.example.alifd.listfilmrecycler.db.DatabaseContract.getColumnString;
 
 public class FilmModel implements Parcelable {
     @SerializedName("vote_count")
@@ -100,6 +106,24 @@ public class FilmModel implements Parcelable {
             return new FilmModel[size];
         }
     };
+
+    public FilmModel(Integer id, Double voteAverage, String title, String posterPath, String overview, String releaseDate) {
+        this.id = id;
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+    }
+
+    public FilmModel(Cursor cursor) {
+        this.id = getColumnInt(cursor, DatabaseContract.FavColumns.ID);
+        this.voteAverage = getColumnDouble(cursor, DatabaseContract.FavColumns.VOTE_AVERAGE);
+        this.title = getColumnString(cursor, DatabaseContract.FavColumns.TITLE);
+        this.posterPath = getColumnString(cursor, DatabaseContract.FavColumns.POSTER_PATH);
+        this.overview = getColumnString(cursor, DatabaseContract.FavColumns.OVERVIEW);
+        this.releaseDate = getColumnString(cursor, DatabaseContract.FavColumns.RELEASE_DATE);
+    }
 
     public Integer getVoteCount() {
         return voteCount;

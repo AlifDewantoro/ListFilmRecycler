@@ -12,12 +12,12 @@ public class DatabaseContract {
 
     public static final class FavColumns implements BaseColumns{
         public static final String TABLE_NAME = "fav_movie";
-        static String ID = "id";
-        static String VOTE_AVERAGE = "vote_average";
-        static String TITLE = "title";
-        static String POSTER_PATH = "poster_path";
-        static String OVERVIEW = "overview";
-        static String RELEASE_DATE = "release_date";
+        public static String ID = "id";
+        public static String VOTE_AVERAGE = "vote_average";
+        public static String TITLE = "title";
+        public static String POSTER_PATH = "poster_path";
+        public static String OVERVIEW = "overview";
+        public static String RELEASE_DATE = "release_date";
 
         public static final Uri CONTENT_URI = new Uri.Builder().scheme(SCHEME)
                 .authority(AUTHORITY)
@@ -43,5 +43,8 @@ public class DatabaseContract {
     }
     public static long getColumnLong(Cursor cursor, String columnName) {
         return cursor.getLong(cursor.getColumnIndex(columnName));
+    }
+    public static double getColumnDouble(Cursor cursor, String columnName) {
+        return cursor.getDouble(cursor.getColumnIndex(columnName));
     }
 }

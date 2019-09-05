@@ -6,12 +6,13 @@ import android.os.Build;
 
 import com.example.alifd.listfilmrecycler.BuildConfig;
 
+import timber.log.Timber;
+
 public class SessionManager {
 
     private final SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
-    private static final String KEY = BuildConfig.API_KEY;
     private static final String LANGUAGE = "language";
     private static final String IMG_BASE_URL = "img_base_url";
 
@@ -22,11 +23,6 @@ public class SessionManager {
         editor.apply();
     }
 
-    public void setKey(String value) {
-        editor.putString(KEY, value);
-        editor.commit();
-    }
-
     public void setLanguage(String value) {
         editor.putString(LANGUAGE, value);
         editor.commit();
@@ -35,10 +31,6 @@ public class SessionManager {
     public void setImgBaseUrl(String value) {
         editor.putString(IMG_BASE_URL, value);
         editor.commit();
-    }
-
-    public String getKey() {
-        return pref.getString(KEY, "");
     }
 
     public String getLanguage() {

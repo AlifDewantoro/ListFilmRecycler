@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.alifd.listfilmrecycler.BuildConfig;
 import com.example.alifd.listfilmrecycler.MainActivity;
 import com.example.alifd.listfilmrecycler.R;
 import com.example.alifd.listfilmrecycler.adapter.TvShowAdapter;
@@ -91,7 +92,7 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
                 if(query.length()>0) {
                     Timber.e("search");
                     tvShowModelArrayList.clear();
-                    tvShowPresenter.getTvListByQuery(sessionManager.getKey(), sessionManager.getLanguage(), query);
+                    tvShowPresenter.getTvListByQuery(BuildConfig.API_KEY, sessionManager.getLanguage(), query);
                     rvTv.setVisibility(View.GONE);
                     progressBar.setVisibility(View.VISIBLE);
                 }
@@ -101,11 +102,13 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
 
             @Override
             public boolean onQueryTextChange(String query) {
+                /*
                 if(query.length()==0){
                     Timber.e("normal");
                     tvShowModelArrayList.clear();
                     requestData();
                 }
+                 */
                 return false;
             }
         });
@@ -118,7 +121,7 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
         }else {
             Timber.e("context null");
         }
-        tvShowPresenter.getTvList(sessionManager.getKey(), sessionManager.getLanguage());
+        tvShowPresenter.getTvList(BuildConfig.API_KEY, sessionManager.getLanguage());
         rvTv.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -151,9 +154,11 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
     @Override
     public void onChangeToFavorite(List<TvShowModel> tvShowModels) {
         Timber.e("to fav");
-        tvShowModelArrayList.clear();
-        tvShowModelArrayList.addAll(tvShowModels);
-        tvShowAdapter.notifyDataSetChanged();
+        if(tvShowModelArrayList!=null) {
+            tvShowModelArrayList.clear();
+            tvShowModelArrayList.addAll(tvShowModels);
+            tvShowAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
