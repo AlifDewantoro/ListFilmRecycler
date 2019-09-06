@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -38,6 +39,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
     SessionManager sessionManager;
     ProgressBar progressBar;
     SearchView searchFilm;
+    SwipeRefreshLayout refresh;
 
     FilmPresenter filmPresenter;
     FilmAdapter filmAdapter;
@@ -61,6 +63,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
         rvFilm = view.findViewById(R.id.rv_film);
         progressBar = view.findViewById(R.id.progress_bar);
         searchFilm = view.findViewById(R.id.search_film);
+        refresh = view.findViewById(R.id.swipe_film);
 
         if(getActivity()!=null){
             ((MainActivity)getActivity()).setFilmFragInteractor(this);
@@ -71,6 +74,14 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), coloum);
         rvFilm.setLayoutManager(layoutManager);
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                filmAdapter.doRefreshFilmDataDb();
+                requestData();
+            }
+        });
 
         if(filmModelArrayList==null){
             filmModelArrayList= new ArrayList<>();
@@ -118,34 +129,6 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
             }
         });
     }
-    //TODO : sambungin ke realm
-    private void setSearchFavorite(){
-        searchFilm.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Timber.e("sum search char : %s", query.length());
-                if(query.length()>0) {
-                    Timber.e("search");
-                    filmModelArrayList.clear();
-                    filmPresenter.getFilmListByQuery(BuildConfig.API_KEY, sessionManager.getLanguage(), query);
-                    rvFilm.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-                searchFilm.clearFocus();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                if(query.length()==0){
-                    Timber.e("normal");
-                    filmModelArrayList.clear();
-                    requestData();
-                }
-                return false;
-            }
-        });
-    }
 
     private void requestData(){
         if(getContext()!=null) {
@@ -163,7 +146,13 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
     public void onSuccessGetData(FilmResponse filmResponse) {
         progressBar.setVisibility(View.GONE);
         rvFilm.setVisibility(View.VISIBLE);
-        filmModelArrayList.addAll(filmResponse.getResults());
+        if(refresh.isRefreshing()){
+            refresh.setRefreshing(false);
+            filmModelArrayList.clear();
+            filmModelArrayList.addAll(filmResponse.getResults());
+        }else{
+            filmModelArrayList.addAll(filmResponse.getResults());
+        }
         if(filmAdapter==null) {
             filmAdapter = new FilmAdapter(getContext(), filmModelArrayList);
             rvFilm.setAdapter(filmAdapter);
@@ -199,6 +188,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
             filmModelArrayList.addAll(filmModels);
             filmAdapter.notifyDataSetChanged();
         }
+        searchFilm.setVisibility(View.GONE);
     }
 
     @Override
@@ -208,5 +198,6 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
         searchFilm.setQuery("",true);
         searchFilm.clearFocus();
         requestData();
+        searchFilm.setVisibility(View.VISIBLE);
     }
 }

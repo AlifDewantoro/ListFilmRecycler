@@ -48,7 +48,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     private List<FilmModel> filmModels;
     private ArrayList<FilmModel> filmModelsDB;
     private SessionManager sessionManager;
-    private FavHelper favHelper;
     private static HandlerThread handlerThread;
     private Cursor cursor;
 
@@ -64,9 +63,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
         context.getContentResolver().registerContentObserver(CONTENT_URI,true,observer);
 
         getDataFromDB();
-
-        this.favHelper = FavHelper.getInstance(context);
-        favHelper.open();
     }
 
     private void getDataFromDB(){
@@ -171,7 +167,6 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        favHelper.close();
     }
 
     private boolean checkFavFilm(FilmModel filmModel){
@@ -185,6 +180,11 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
         }
         Timber.e("%s", result);
         return result;
+    }
+
+    public void doRefreshFilmDataDb(){
+        filmModelsDB.clear();
+        getDataFromDB();
     }
 
     public static class DataObserver extends ContentObserver {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -39,6 +40,7 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
     SessionManager sessionManager;
     ProgressBar progressBar;
     SearchView searchTv;
+    SwipeRefreshLayout refresh;
 
     TvShowPresenter tvShowPresenter;
     TvShowAdapter tvShowAdapter;
@@ -62,6 +64,14 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
         rvTv = view.findViewById(R.id.rv_tv_show);
         progressBar = view.findViewById(R.id.progress_bar);
         searchTv = view.findViewById(R.id.search_tv);
+        refresh = view.findViewById(R.id.swipe_show);
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestData();
+            }
+        });
 
         if(getActivity()!=null){
             ((MainActivity)getActivity()).setTvShowFragInteractor(this);
@@ -137,6 +147,11 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
         }else{
             tvShowAdapter.notifyDataSetChanged();
         }
+
+        if(refresh.isRefreshing()){
+            refresh.setRefreshing(false);
+            tvShowAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -159,6 +174,7 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
             tvShowModelArrayList.addAll(tvShowModels);
             tvShowAdapter.notifyDataSetChanged();
         }
+        searchTv.setVisibility(View.GONE);
     }
 
     @Override
@@ -168,5 +184,6 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
         searchTv.setQuery("",true);
         searchTv.clearFocus();
         requestData();
+        searchTv.setVisibility(View.VISIBLE);
     }
 }
