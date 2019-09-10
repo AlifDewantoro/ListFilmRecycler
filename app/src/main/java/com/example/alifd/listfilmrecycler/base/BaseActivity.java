@@ -1,7 +1,8 @@
 package com.example.alifd.listfilmrecycler.base;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.alifd.listfilmrecycler.helper.SessionManager;
 

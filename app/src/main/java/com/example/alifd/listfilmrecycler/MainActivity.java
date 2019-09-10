@@ -3,8 +3,8 @@ package com.example.alifd.listfilmrecycler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,6 +13,7 @@ import com.example.alifd.listfilmrecycler.base.BaseActivity;
 import com.example.alifd.listfilmrecycler.db.FavHelper;
 import com.example.alifd.listfilmrecycler.view.FilmLocalView;
 import com.example.alifd.listfilmrecycler.view.TvShowLocalView;
+import com.google.android.material.tabs.TabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -6,13 +6,11 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.example.alifd.listfilmrecycler.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.alifd.listfilmrecycler.adapter.FilmAdapter;
-
-import timber.log.Timber;
 
 import static com.example.alifd.listfilmrecycler.db.DatabaseContract.AUTHORITY;
 import static com.example.alifd.listfilmrecycler.db.DatabaseContract.FavColumns.CONTENT_URI;
