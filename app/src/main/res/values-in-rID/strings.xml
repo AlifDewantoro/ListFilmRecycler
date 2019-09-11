@@ -21,4 +21,6 @@
     <string name="to_favorite">Ke Favorit</string>
     <string name="to_list">Ke Daftar</string>
     <string name="item_widget">item widget</string>
+    <string name="default_notification_channel_id">fcm_default_channel</string>
+    <string name="default_notification_channel_name">Film</string>
 </resources>

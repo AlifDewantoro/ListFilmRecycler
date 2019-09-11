@@ -93,7 +93,11 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
                 .apply(requestOptions)
                 .into(viewHolder.ivFilm);
         viewHolder.tvJudul.setText((i+1)+". "+filmModel.getTitle());
-        viewHolder.tvTahun.setText("("+filmModel.getReleaseDate()+")");
+        if(filmModel.getReleaseDate()!=null) {
+            viewHolder.tvTahun.setText("(" + filmModel.getReleaseDate() + ")");
+        }else{
+            viewHolder.tvTahun.setText("(Coming soon)");
+        }
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

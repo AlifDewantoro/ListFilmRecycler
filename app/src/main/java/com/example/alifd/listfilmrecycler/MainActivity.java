@@ -1,6 +1,9 @@
 package com.example.alifd.listfilmrecycler;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.viewpager.widget.ViewPager;
@@ -14,6 +17,8 @@ import com.example.alifd.listfilmrecycler.db.FavHelper;
 import com.example.alifd.listfilmrecycler.view.FilmLocalView;
 import com.example.alifd.listfilmrecycler.view.TvShowLocalView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +89,16 @@ public class MainActivity extends BaseActivity {
         filmViewPager.setAdapter(pagerAdapter);
         filmViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(filmTabLayout));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = getString(R.string.default_notification_channel_id);
+            String channelName = getString(R.string.default_notification_channel_name);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW));
+        }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("films");
     }
 
     public void setFilmFragInteractor(FilmLocalView filmLocalView){
