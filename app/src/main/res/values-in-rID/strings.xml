@@ -23,4 +23,7 @@
     <string name="item_widget">item widget</string>
     <string name="default_notification_channel_id">fcm_default_channel</string>
     <string name="default_notification_channel_name">Film</string>
+    <string name="key_daily_notif">daily</string>
+    <string name="key_release_notif">release</string>
+    <string name="notification">Notification</string>
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Notification Setting"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:key="@string/key_daily_notif"
+            android:title="Daily Reminder"
+            app:iconSpaceReserved="false"/>
+        <SwitchPreferenceCompat
+            android:key="@string/key_release_notif"
+            android:title="New Release"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+</PreferenceScreen>

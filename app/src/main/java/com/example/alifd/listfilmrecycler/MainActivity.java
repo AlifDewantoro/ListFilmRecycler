@@ -1,28 +1,28 @@
 package com.example.alifd.listfilmrecycler;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.alifd.listfilmrecycler.adapter.CustomPagerAdapter;
 import com.example.alifd.listfilmrecycler.base.BaseActivity;
 import com.example.alifd.listfilmrecycler.db.FavHelper;
+import com.example.alifd.listfilmrecycler.reminder.AlarmReceiver;
+import com.example.alifd.listfilmrecycler.reminder.setting.SettingActivity;
 import com.example.alifd.listfilmrecycler.view.FilmLocalView;
 import com.example.alifd.listfilmrecycler.view.TvShowLocalView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
+
+import static com.example.alifd.listfilmrecycler.reminder.AlarmReceiver.DAILY_REMINDER;
+import static com.example.alifd.listfilmrecycler.reminder.AlarmReceiver.NEW_FILMS;
 
 public class MainActivity extends BaseActivity {
 
@@ -89,16 +89,6 @@ public class MainActivity extends BaseActivity {
         filmViewPager.setAdapter(pagerAdapter);
         filmViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(filmTabLayout));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = getString(R.string.default_notification_channel_id);
-            String channelName = getString(R.string.default_notification_channel_name);
-            NotificationManager notificationManager =
-                    getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_LOW));
-        }
-
-        FirebaseMessaging.getInstance().subscribeToTopic("films");
     }
 
     public void setFilmFragInteractor(FilmLocalView filmLocalView){
@@ -135,8 +125,8 @@ public class MainActivity extends BaseActivity {
 
         switch (itemId){
             case (R.id.action_change_settings):
-                Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
-                startActivity(mIntent);
+                Intent langIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+                startActivity(langIntent);
                 break;
             case(R.id.action_to_favorite):
                 listVisibility = true;
@@ -153,6 +143,10 @@ public class MainActivity extends BaseActivity {
                 allList.setVisible(listVisibility);
                 filmLocalView.onChangeToList();
                 tvShowLocalView.onChangeToList();
+                break;
+            case(R.id.action_notification_settings):
+                Intent notifIntent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(notifIntent);
                 break;
             default:
                 break;

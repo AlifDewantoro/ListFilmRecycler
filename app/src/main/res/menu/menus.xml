@@ -16,5 +16,10 @@
         android:id="@+id/action_change_settings"
         android:title="@string/change_language"
         android:icon="@drawable/ic_compare_arrows_white"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_notification_settings"
+        android:title="@string/notification"
+        android:icon="@drawable/ic_compare_arrows_white"
+        app:showAsAction="never"/>
 </menu>
