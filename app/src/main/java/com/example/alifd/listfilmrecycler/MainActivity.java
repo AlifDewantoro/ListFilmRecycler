@@ -1,7 +1,9 @@
 package com.example.alifd.listfilmrecycler;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +43,7 @@ public class MainActivity extends BaseActivity {
     FilmLocalView filmLocalView;
     TvShowLocalView tvShowLocalView;
 
+    AlarmReceiver alarmReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,8 @@ public class MainActivity extends BaseActivity {
             favVisibility = true;
             listVisibility = false;
         }
+
+        alarmReceiver = new AlarmReceiver();
 
         TabLayout.Tab firstTab = filmTabLayout.newTab();
         firstTab.setText(getString(R.string.film_menu));
@@ -89,6 +94,27 @@ public class MainActivity extends BaseActivity {
         filmViewPager.setAdapter(pagerAdapter);
         filmViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(filmTabLayout));
 
+        Timber.e("data dari notif di main act : %s", getIntent().getStringExtra("from_notif"));
+
+
+        SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);;
+        boolean dailySwitch = sh.getBoolean(getResources().getString(R.string.key_daily_notif), false);
+        boolean releaseSwitch = sh.getBoolean(getResources().getString(R.string.key_release_notif), false);
+        Timber.e("daily setting %s", dailySwitch);
+        Timber.e("release setting %s", releaseSwitch);
+
+        //TODO tambah if untuk pengaktifan awal notifikasi
+        if(dailySwitch) {
+            alarmReceiver.setDailyReminderNotif(this, DAILY_REMINDER, "Mau nonton film? lihat dlu yuk list filmnya");
+        }else {
+            alarmReceiver.stopNotification(this, DAILY_REMINDER);
+        }
+
+        if(dailySwitch) {
+            alarmReceiver.setNewReleaseNotif(this, NEW_FILMS, "Ada film baru nih");
+        }else {
+            alarmReceiver.stopNotification(this, NEW_FILMS);
+        }
     }
 
     public void setFilmFragInteractor(FilmLocalView filmLocalView){

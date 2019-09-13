@@ -57,6 +57,41 @@ public class FilmPresenter extends BasePresenter {
                 });
     }
 
+    public void getFilmList(String key, String date_gte, String date_lte){
+        service.getFilmList(key, date_gte, date_lte)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<FilmResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(FilmResponse filmResponse) {
+                        filmView.onSuccessGetData(filmResponse);
+                        Timber.e("success get data");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof HttpException) {
+                            ResponseBody responseBody = ((HttpException)e).response().errorBody();
+                            filmView.onFailed(getErrorStatus(responseBody), getErrorMessage(responseBody));
+                            Timber.e("failed get data");
+                        } else {
+                            filmView.onFailed(e.getMessage(), e.getMessage());
+                            Timber.e("failed get data : unknown error");
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public void getFilmListByQuery(String key, String lang, String query){
         service.getFilmListByQuery(key, lang, query)
                 .subscribeOn(Schedulers.io())

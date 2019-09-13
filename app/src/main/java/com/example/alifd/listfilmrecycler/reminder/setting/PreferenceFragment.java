@@ -9,6 +9,8 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.example.alifd.listfilmrecycler.R;
 import com.example.alifd.listfilmrecycler.reminder.AlarmReceiver;
 
+import timber.log.Timber;
+
 import static com.example.alifd.listfilmrecycler.reminder.AlarmReceiver.DAILY_REMINDER;
 import static com.example.alifd.listfilmrecycler.reminder.AlarmReceiver.NEW_FILMS;
 
@@ -64,6 +66,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
             }else {
                 alarmReceiver.stopNotification(getContext(), DAILY_REMINDER);
             }
+            Timber.e("%s", dailySwitch.isChecked());
         }
 
         if (key.equals(RELEASE_NOTIF) && getContext()!=null){
@@ -73,6 +76,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements Shar
             }else {
                 alarmReceiver.stopNotification(getContext(), NEW_FILMS);
             }
+            Timber.e("%s", releaseSwitch.isChecked());
         }
     }
 }

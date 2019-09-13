@@ -1,6 +1,8 @@
 package com.example.alifd.listfilmrecycler;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,5 +42,27 @@ public class DetailTvShowActivity extends BaseActivity {
 
         tvDesTv.setText(String.format("%s\n%s\n\nSkor %s\n\nOverview \n%s",TvModel.getName(),
                 TvModel.getFirstAirDate(), score, TvModel.getOverview()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int idSelected = item.getItemId();
+
+        switch (idSelected) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

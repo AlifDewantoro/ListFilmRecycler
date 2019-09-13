@@ -74,8 +74,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent.putExtra(EXTRA_MESSAGE, message);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
-        calendar.set(Calendar.MINUTE, 2);
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_ID_NEW_FILMS, intent, 0);
         if (alarmManager != null) {
@@ -177,8 +177,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         String channelId  = String.valueOf(chId);
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("from_notif", true);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context, channelId)

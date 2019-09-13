@@ -28,8 +28,11 @@ import com.example.alifd.listfilmrecycler.presenter.FilmPresenter;
 import com.example.alifd.listfilmrecycler.view.FilmLocalView;
 import com.example.alifd.listfilmrecycler.view.FilmView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import timber.log.Timber;
@@ -47,6 +50,8 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
 
     ArrayList<FilmModel> filmModelArrayList;
 
+    String dateFormat = "yyyy-MM-dd";
+    boolean status;
     public FilmFragment() {
         // Required empty public constructor
     }
@@ -68,6 +73,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
 
         if(getActivity()!=null){
             ((MainActivity)getActivity()).setFilmFragInteractor(this);
+            status = getActivity().getIntent().getBooleanExtra("from_notif", false);
         }
 
         filmPresenter = new FilmPresenter(this);
@@ -137,7 +143,17 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
         }else {
             Timber.e("context null");
         }
-        filmPresenter.getFilmList(BuildConfig.API_KEY, sessionManager.getLanguage());
+        Timber.e("status from notification %s", status);
+        if(status){
+            Timber.e("notif request");
+            String date_gte = new SimpleDateFormat(dateFormat, Locale.getDefault()).format(new Date());
+            String date_lte = new SimpleDateFormat (dateFormat, Locale.getDefault()).format(new Date());
+            filmPresenter.getFilmList(BuildConfig.API_KEY, date_gte, date_lte);
+            status = false;
+        }else {
+            Timber.e("normal request");
+            filmPresenter.getFilmList(BuildConfig.API_KEY, sessionManager.getLanguage());
+        }
         Timber.e("get key %s", BuildConfig.API_KEY);
         rvFilm.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);

@@ -16,6 +16,11 @@ public interface Service {
     Observable<FilmResponse> getFilmList(@Header("Authorization") String api_key,
                                          @Field("language") String type);
     @FormUrlEncoded
+    @POST("discover/movie")
+    Observable<FilmResponse> getFilmList(@Header("Authorization") String api_key,
+                                         @Field("primary_release_date.gte") String date_gte,
+                                         @Field("primary_release_date.lte") String date_lte);
+    @FormUrlEncoded
     @POST("discover/tv")
     Observable<TvResponse> getTvList(@Header("Authorization") String api_key,
                                      @Field("language") String type);

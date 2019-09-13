@@ -1,6 +1,8 @@
 package com.example.alifd.listfilmrecycler;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,6 +12,7 @@ import com.example.alifd.listfilmrecycler.model.FilmModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class DetailFilmActivity extends BaseActivity {
 
@@ -42,5 +45,27 @@ public class DetailFilmActivity extends BaseActivity {
 
         tv_des_desc.setText(String.format("%s\n%s\n\nSkor %s\n\nOverview \n%s",filmModel.getTitle(),
                 filmModel.getReleaseDate(), score, filmModel.getOverview()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int idSelected = item.getItemId();
+
+        switch (idSelected) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

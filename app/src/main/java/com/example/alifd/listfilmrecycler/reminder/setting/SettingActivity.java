@@ -15,4 +15,5 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         getSupportFragmentManager().beginTransaction().add(R.id.setting_holder, new PreferenceFragment()).commit();
     }
+
 }
