@@ -158,6 +158,9 @@ public class TvShowFragment extends Fragment implements TvShowView, TvShowLocalV
     @Override
     public void onFailed(String code, String message) {
         progressBar.setVisibility(View.GONE);
+        if(refresh.isRefreshing()) {
+            refresh.setRefreshing(false);
+        }
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 

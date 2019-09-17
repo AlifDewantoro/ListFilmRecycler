@@ -7,18 +7,19 @@ import timber.log.Timber;
 
 public class BasePresenter {
 
-    public String getErrorStatus(ResponseBody responseBody) {
+    public String getErrorStatus(String body) {
         try {
-            JSONObject jsonObject = new JSONObject(responseBody.string());
-            Timber.e(responseBody.string());
+            Timber.e("ini message error status : %s", body);
+            JSONObject jsonObject = new JSONObject(body);
             return jsonObject.getString("status_code");
         } catch (Exception e) {
             return e.getMessage();
         }
     }
-    public String getErrorMessage(ResponseBody responseBody) {
+    public String getErrorMessage(String body) {
         try {
-            JSONObject jsonObject = new JSONObject(responseBody.string());
+            Timber.e("get error message %s", body);
+            JSONObject jsonObject = new JSONObject(body);
             return jsonObject.getString("status_message");
         } catch (Exception e) {
             return e.getMessage();

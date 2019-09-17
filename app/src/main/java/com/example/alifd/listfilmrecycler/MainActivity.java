@@ -97,13 +97,12 @@ public class MainActivity extends BaseActivity {
         Timber.e("data dari notif di main act : %s", getIntent().getStringExtra("from_notif"));
 
 
-        SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);;
+        SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);
         boolean dailySwitch = sh.getBoolean(getResources().getString(R.string.key_daily_notif), false);
         boolean releaseSwitch = sh.getBoolean(getResources().getString(R.string.key_release_notif), false);
         Timber.e("daily setting %s", dailySwitch);
         Timber.e("release setting %s", releaseSwitch);
 
-        //TODO tambah if untuk pengaktifan awal notifikasi
         if(dailySwitch) {
             alarmReceiver.setDailyReminderNotif(this, DAILY_REMINDER, "Mau nonton film? lihat dlu yuk list filmnya");
         }else {

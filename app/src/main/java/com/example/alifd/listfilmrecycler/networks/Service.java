@@ -6,33 +6,33 @@ import com.example.alifd.listfilmrecycler.model.TvResponse;
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface Service {
 
-    @FormUrlEncoded
+    //@FormUrlEncoded
     @POST("discover/movie")
-    Observable<FilmResponse> getFilmList(@Header("Authorization") String api_key,
-                                         @Field("language") String type);
-    @FormUrlEncoded
+    Observable<FilmResponse> getFilmList(@Query("api_key") String api_key,
+                                         @Query("language") String type);
+    //@FormUrlEncoded
     @POST("discover/movie")
-    Observable<FilmResponse> getFilmList(@Header("Authorization") String api_key,
-                                         @Field("primary_release_date.gte") String date_gte,
-                                         @Field("primary_release_date.lte") String date_lte);
-    @FormUrlEncoded
+    Observable<FilmResponse> getFilmList(@Query("api_key") String api_key,
+                                         @Query("primary_release_date.gte") String date_gte,
+                                         @Query("primary_release_date.lte") String date_lte);
+    //@FormUrlEncoded
     @POST("discover/tv")
-    Observable<TvResponse> getTvList(@Header("Authorization") String api_key,
-                                     @Field("language") String type);
-    @FormUrlEncoded
+    Observable<TvResponse> getTvList(@Query("api_key") String api_key,
+                                     @Query("language") String type);
+    //@FormUrlEncoded
     @POST("search/movie")
-    Observable<FilmResponse> getFilmListByQuery(@Header("Authorization") String api_key,
-                                     @Field("language") String type,
-                                     @Field("query") String query);
-    @FormUrlEncoded
+    Observable<FilmResponse> getFilmListByQuery(@Query("api_key") String api_key,
+                                     @Query("language") String type,
+                                     @Query("query") String query);
+    //@FormUrlEncoded
     @POST("search/tv")
-    Observable<TvResponse> getTvListByQuery(@Header("Authorization") String api_key,
-                                            @Field("language") String type,
-                                            @Field("query") String query);
+    Observable<TvResponse> getTvListByQuery(@Query("api_key") String api_key,
+                                            @Query("language") String type,
+                                            @Query("query") String query);
 
 }

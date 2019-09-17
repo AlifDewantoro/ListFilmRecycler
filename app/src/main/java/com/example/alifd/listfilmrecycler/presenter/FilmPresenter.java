@@ -6,6 +6,8 @@ import com.example.alifd.listfilmrecycler.networks.RetrofitInstance;
 import com.example.alifd.listfilmrecycler.networks.Service;
 import com.example.alifd.listfilmrecycler.view.FilmView;
 
+import java.io.IOException;
+
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -42,7 +44,14 @@ public class FilmPresenter extends BasePresenter {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody responseBody = ((HttpException)e).response().errorBody();
-                            filmView.onFailed(getErrorStatus(responseBody), getErrorMessage(responseBody));
+                            try {
+                                assert responseBody != null;
+                                String body = responseBody.string();
+                                Timber.e("ini message throwable : %s", body);
+                                filmView.onFailed(getErrorStatus(body), getErrorMessage(body));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
                             Timber.e("failed get data");
                         } else {
                             filmView.onFailed(e.getMessage(), e.getMessage());
@@ -77,7 +86,14 @@ public class FilmPresenter extends BasePresenter {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody responseBody = ((HttpException)e).response().errorBody();
-                            filmView.onFailed(getErrorStatus(responseBody), getErrorMessage(responseBody));
+                            try {
+                                assert responseBody != null;
+                                String body = responseBody.string();
+                                Timber.e("ini message throwable : %s", body);
+                                filmView.onFailed(getErrorStatus(body), getErrorMessage(body));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
                             Timber.e("failed get data");
                         } else {
                             filmView.onFailed(e.getMessage(), e.getMessage());
@@ -112,7 +128,14 @@ public class FilmPresenter extends BasePresenter {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody responseBody = ((HttpException)e).response().errorBody();
-                            filmView.onFailed(getErrorStatus(responseBody), getErrorMessage(responseBody));
+                            try {
+                                assert responseBody != null;
+                                String body = responseBody.string();
+                                Timber.e("ini message throwable : %s", body);
+                                filmView.onFailed(getErrorStatus(body), getErrorMessage(body));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
                             Timber.e("failed get data");
                         } else {
                             filmView.onFailed(e.getMessage(), e.getMessage());

@@ -85,8 +85,13 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                filmAdapter.doRefreshFilmDataDb();
-                requestData();
+                if(filmAdapter!=null) {
+                    filmAdapter.doRefreshFilmDataDb();
+                    requestData();
+                }else{
+                    Toast.makeText(getContext(), "Data kosong", Toast.LENGTH_LONG).show();
+                    refresh.setRefreshing(false);
+                }
             }
         });
 
