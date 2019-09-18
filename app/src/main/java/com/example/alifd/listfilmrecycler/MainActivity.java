@@ -94,8 +94,8 @@ public class MainActivity extends BaseActivity {
         filmViewPager.setAdapter(pagerAdapter);
         filmViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(filmTabLayout));
 
-        Timber.e("data dari notif di main act : %s", getIntent().getStringExtra("from_notif"));
-
+        boolean fromNotif = getIntent().getBooleanExtra("from_notif", false);
+        Timber.e("data dari notif di main act : %s", fromNotif);
 
         SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(this);
         boolean dailySwitch = sh.getBoolean(getResources().getString(R.string.key_daily_notif), false);
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity {
             alarmReceiver.stopNotification(this, DAILY_REMINDER);
         }
 
-        if(dailySwitch) {
+        if(releaseSwitch) {
             alarmReceiver.setNewReleaseNotif(this, NEW_FILMS, "Ada film baru nih");
         }else {
             alarmReceiver.stopNotification(this, NEW_FILMS);
