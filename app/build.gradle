@@ -11,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        buildConfigField("String", "API_KEY", '"c0516694b005691830fd5f18ac792458"')
+        buildConfigField("String", "API_KEY", '"9ddc68f750e33edf9f08a462994dbd8c"')
     }
     buildTypes {
         release {
