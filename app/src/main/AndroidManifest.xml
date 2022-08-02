@@ -13,19 +13,23 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".reminder.setting.SettingActivity"
             android:label="Settings"
+            android:exported="false"
             android:parentActivityName=".MainActivity"/>
 
         <activity
             android:name=".DetailTvShowActivity"
             android:label="@string/detail_tv_title"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
 
         <activity
             android:name=".DetailFilmActivity"
             android:label="@string/detail_film_title"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,7 +37,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".base.BaseActivity" />
+        <activity android:name=".base.BaseActivity"
+            android:exported="false" />
         <provider
             android:name=".db.FavProvider"
             android:authorities="com.example.alifd.listfilmrecycler"
@@ -42,9 +47,9 @@
             android:writePermission="com.example.alifd.listfilmrecycler.WRITE_DATABASE" />
         <receiver
             android:name=".reminder.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true" />
-        <receiver android:name=".widget.ListFilmAppWidget">
+            android:enabled="true" />
+        <receiver android:name=".widget.ListFilmAppWidget"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

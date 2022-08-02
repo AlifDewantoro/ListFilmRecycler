@@ -77,7 +77,7 @@ public class FilmFragment extends Fragment implements FilmView, FilmLocalView {
         }
 
         filmPresenter = new FilmPresenter(this);
-        int coloum = calculateNoOfColumns(Objects.requireNonNull(getContext()), 180f);
+        int coloum = calculateNoOfColumns(requireContext(), 180f);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), coloum);
         rvFilm.setLayoutManager(layoutManager);
