@@ -4,13 +4,13 @@
 
     <application
         android:name=".base.BaseApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="false">
         <activity android:name=".reminder.setting.SettingActivity"
             android:label="Settings"
             android:exported="false"
@@ -42,14 +42,15 @@
         <provider
             android:name=".db.FavProvider"
             android:authorities="com.example.alifd.listfilmrecycler"
-            android:exported="true"
+            android:exported="false"
             android:readPermission="com.example.alifd.listfilmrecycler.READ_DATABASE"
             android:writePermission="com.example.alifd.listfilmrecycler.WRITE_DATABASE" />
         <receiver
             android:name=".reminder.AlarmReceiver"
             android:enabled="true" />
         <receiver android:name=".widget.ListFilmAppWidget"
-            android:exported="true">
+            android:exported="false"
+            android:permission="com.example.alifd.listfilmrecycler.BROADCAST_RECEIVER">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -69,6 +70,9 @@
     <permission
         android:name="com.example.alifd.listfilmrecycler.READ_DATABASE"
         android:protectionLevel="normal" />
+    <permission
+        android:name="com.example.alifd.listfilmrecycler.BROADCAST_RECEIVER"
+        android:protectionLevel="signature" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="android.permission.INTERNET" />
