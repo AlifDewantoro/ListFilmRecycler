@@ -23,6 +23,24 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    signingConfigs {
+        keyListFilm {
+            keyPassword '17-09-1996'
+            storeFile file('ListFilmRecycler.jks')
+            keyAlias 'keyListFilm'
+            storePassword '17-09-1996'
+        }
+    }
+    flavorDimensions 'version'
+    productFlavors {
+        dev {
+            dimension = 'version'
+        }
+        live {
+            signingConfig signingConfigs.keyListFilm
+            dimension = 'version'
+        }
+    }
     ndkVersion '21.3.6528147'
 }
 
